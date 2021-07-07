@@ -69,8 +69,15 @@ class CommunityController extends Controller
      */
     public function update(Request $request, Community $community)
     {
+        $request->validate([
+            'name' => 'required|String|unique:communities,name,'.$community->id.'|max:25',
+            'address' => 'required|max:100',
+            'phone' => 'required|max:10',
+            'contact' => 'required|max:50',
+            'contact_phone' => 'required|max:10'
+        ]);
         $community->update($request->all());
-
+        
         return response(['community'=> $community, 'message'=> 'Updated successfully.']);
     }
 
@@ -82,6 +89,7 @@ class CommunityController extends Controller
      */
     public function destroy(Community $community)
     {
-        //
+        $community->delete();
+        return response(['success'=>true], 200);
     }
 }
